@@ -72,7 +72,7 @@ Public Class Cotiza
         BindingSource9.DataSource = dt
         dgNotasAnalisis.DataSource = BindingSource9
         Multi_LineGrid(dgNotasAnalisis)
-
+        formatearGrillas()
         txEmpresa.AutoCompleteCustomSource = AutocompletarEmpresa()
         txEmpresa.AutoCompleteMode = AutoCompleteMode.SuggestAppend
         txEmpresa.AutoCompleteSource = AutoCompleteSource.CustomSource
@@ -326,6 +326,7 @@ Public Class Cotiza
         vaNeto = dgFoliar.Rows(e.RowIndex).Cells(2).Value
         vaTipo = dgFoliar.Rows(e.RowIndex).Cells(3).Value.ToString()
 
+        txReciente.Text = vaDescripcion
         calculacantidad()
         ' Me.txCantidad.Focus()
     End Sub
@@ -337,6 +338,7 @@ Public Class Cotiza
         vaDescripcion = dgTejidos.Rows(e.RowIndex).Cells(1).Value.ToString()
         vaNeto = dgTejidos.Rows(e.RowIndex).Cells(2).Value
         vaTipo = dgTejidos.Rows(e.RowIndex).Cells(3).Value.ToString()
+        txReciente.Text = vaDescripcion
         calculacantidad()
     End Sub
 
@@ -346,6 +348,7 @@ Public Class Cotiza
         vaDescripcion = dgAguas.Rows(e.RowIndex).Cells(1).Value.ToString()
         vaNeto = dgAguas.Rows(e.RowIndex).Cells(2).Value
         vaTipo = dgAguas.Rows(e.RowIndex).Cells(3).Value.ToString()
+        txReciente.Text = vaDescripcion
 
         calculacantidad()
     End Sub
@@ -357,6 +360,7 @@ Public Class Cotiza
         vaDescripcion = dgFitopatologicos.Rows(e.RowIndex).Cells(1).Value.ToString()
         vaNeto = dgFitopatologicos.Rows(e.RowIndex).Cells(2).Value
         vaTipo = dgFitopatologicos.Rows(e.RowIndex).Cells(3).Value.ToString()
+        txReciente.Text = vaDescripcion
 
         calculacantidad()
     End Sub
@@ -368,6 +372,7 @@ Public Class Cotiza
         vaDescripcion = dgOrganicos.Rows(e.RowIndex).Cells(1).Value.ToString()
         vaNeto = dgOrganicos.Rows(e.RowIndex).Cells(2).Value
         vaTipo = dgOrganicos.Rows(e.RowIndex).Cells(3).Value.ToString()
+        txReciente.Text = vaDescripcion
 
         calculacantidad()
     End Sub
@@ -379,6 +384,7 @@ Public Class Cotiza
         vaDescripcion = dgOtros.Rows(e.RowIndex).Cells(1).Value.ToString()
         vaNeto = dgOtros.Rows(e.RowIndex).Cells(2).Value
         vaTipo = dgOtros.Rows(e.RowIndex).Cells(3).Value.ToString()
+        txReciente.Text = vaDescripcion
 
         calculacantidad()
     End Sub
@@ -390,6 +396,7 @@ Public Class Cotiza
         vaDescripcion = dgQuimicos.Rows(e.RowIndex).Cells(1).Value.ToString()
         vaNeto = dgQuimicos.Rows(e.RowIndex).Cells(2).Value
         vaTipo = dgQuimicos.Rows(e.RowIndex).Cells(3).Value.ToString()
+        txReciente.Text = vaDescripcion
 
         calculacantidad()
     End Sub
@@ -401,6 +408,7 @@ Public Class Cotiza
         vaDescripcion = dgSuelos.Rows(e.RowIndex).Cells(1).Value.ToString()
         vaNeto = dgSuelos.Rows(e.RowIndex).Cells(2).Value
         vaTipo = dgSuelos.Rows(e.RowIndex).Cells(3).Value.ToString()
+        txReciente.Text = vaDescripcion
 
         calculacantidad()
     End Sub
@@ -414,6 +422,7 @@ Public Class Cotiza
         txTelefono.Text = ""
         txEmail.Text = ""
         txAtencion.Text = ""
+        txReciente.Text = ""
 
     End Sub
     Private Sub mostrar(ByVal dt As DataTable)
@@ -422,6 +431,7 @@ Public Class Cotiza
         txTelefono.Text = dt.Rows(0).Item("PRO_FONO1").ToString
         txEmail.Text = dt.Rows(0).Item("PRO_EMAIL1").ToString
         txAtencion.Text = dt.Rows(0).Item("PRO_DESP_ATENCION").ToString
+        txLocalidad.Text = dt.Rows(0).Item("PRO_LOCALIDAD").ToString
 
     End Sub
 
@@ -730,7 +740,13 @@ Public Class Cotiza
 
             Tabla = New iTextSharp.text.pdf.PdfPTable(6)
             Tabla.WidthPercentage = 100.0!
-            Tabla.SetWidths(New Single() {61.0!, 7.0!, 8.0!, 9.0!, 6.0!, 9.0!})
+            Tabla.SetWidths(New Single() {7.0!, 60.0!, 7.0!, 8.0!, 9.0!, 9.0!})
+
+            Frase = New iTextSharp.text.Phrase("Cód.", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, iTextSharp.text.Color.WHITE))
+            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+            Celda.Border = Rectangle.BOTTOM_BORDER
+            Celda.BackgroundColor = vaColor
+            Tabla.AddCell(Celda)
 
             Frase = New iTextSharp.text.Phrase("Descripción", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, iTextSharp.text.Color.WHITE))
             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
@@ -759,12 +775,12 @@ Public Class Cotiza
             Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
             Tabla.AddCell(Celda)
 
-            Frase = New iTextSharp.text.Phrase("%Dcto", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, iTextSharp.text.Color.WHITE))
-            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-            Celda.Border = 0
-            Celda.BackgroundColor = vaColor
-            Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
-            Tabla.AddCell(Celda)
+            'Frase = New iTextSharp.text.Phrase("%Dcto", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, iTextSharp.text.Color.WHITE))
+            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+            'Celda.Border = 0
+            'Celda.BackgroundColor = vaColor
+            'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
+            'Tabla.AddCell(Celda)
 
             Frase = New iTextSharp.text.Phrase("$Total", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, iTextSharp.text.Color.WHITE))
             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
@@ -781,9 +797,15 @@ Public Class Cotiza
             reporte.Add(Parrafo)
 
 
-            Tabla = New iTextSharp.text.pdf.PdfPTable(3)
+            Tabla = New iTextSharp.text.pdf.PdfPTable(4)
             Tabla.WidthPercentage = 100.0!
-            Tabla.SetWidths(New Single() {80.0!, 10.0!, 10.0!})
+            Tabla.SetWidths(New Single() {10.0!, 70.0!, 10.0!, 10.0!})
+
+            Frase = New iTextSharp.text.Phrase("Cód.", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, iTextSharp.text.Color.WHITE))
+            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+            Celda.Border = 1
+            Celda.BackgroundColor = vaColor
+            Tabla.AddCell(Celda)
 
             Frase = New iTextSharp.text.Phrase("Descripción", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, iTextSharp.text.Color.WHITE))
             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
@@ -817,7 +839,7 @@ Public Class Cotiza
             'detalle tabla +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             Tabla = New iTextSharp.text.pdf.PdfPTable(6)
             Tabla.WidthPercentage = 100.0!
-            Tabla.SetWidths(New Single() {61.0!, 7.0!, 8.0!, 9.0!, 6.0!, 9.0!})
+            Tabla.SetWidths(New Single() {7.0!, 60.0!, 7.0!, 8.0!, 9.0!, 9.0!})
 
 
             Dim tipoCelda As Integer
@@ -852,6 +874,13 @@ Public Class Cotiza
                 If Row.Cells(0).Value.ToString >= 1000 And Row.Cells(0).Value.ToString <= 1999 And entroFol > 0 Then
                     entroFol = 0 'si es un titulo pinta de un color mas suave
 
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Tabla.AddCell(Celda)
+
+                    'cantidad
                     Frase = New iTextSharp.text.Phrase("TEJIDOS VEGETALES", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -882,12 +911,12 @@ Public Class Cotiza
                     Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                     Tabla.AddCell(Celda)
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColorBGTitulo
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColorBGTitulo
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -908,6 +937,13 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -938,12 +974,12 @@ Public Class Cotiza
                             Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                             Tabla.AddCell(Celda)
 
-                            '% descuento
-                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                            Celda.Border = 0
-                            Celda.BackgroundColor = vaColorBGTitulo
-                            Tabla.AddCell(Celda)
+                            ''% descuento
+                            'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            'Celda.Border = 0
+                            'Celda.BackgroundColor = vaColorBGTitulo
+                            'Tabla.AddCell(Celda)
 
                             'total
 
@@ -959,6 +995,15 @@ Public Class Cotiza
                     End If
 
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -995,13 +1040,13 @@ Public Class Cotiza
                     Tabla.AddCell(Celda)
 
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColor
-                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColor
+                    'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -1014,6 +1059,12 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 2000 And Row.Cells(0).Value.ToString <= 2999 And entroTej > 0 Then
                     entroTej = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Tabla.AddCell(Celda)
 
                     Frase = New iTextSharp.text.Phrase("FRUTOS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
@@ -1045,12 +1096,12 @@ Public Class Cotiza
                     Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                     Tabla.AddCell(Celda)
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColorBGTitulo
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColorBGTitulo
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -1072,6 +1123,13 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -1102,12 +1160,12 @@ Public Class Cotiza
                             Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                             Tabla.AddCell(Celda)
 
-                            '% descuento
-                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                            Celda.Border = 0
-                            Celda.BackgroundColor = vaColorBGTitulo
-                            Tabla.AddCell(Celda)
+                            ''% descuento
+                            'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            'Celda.Border = 0
+                            'Celda.BackgroundColor = vaColorBGTitulo
+                            'Tabla.AddCell(Celda)
 
                             'total
 
@@ -1123,6 +1181,14 @@ Public Class Cotiza
                     End If
 
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -1159,13 +1225,13 @@ Public Class Cotiza
                     Tabla.AddCell(Celda)
 
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColor
-                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColor
+                    'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -1178,6 +1244,15 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 3000 And Row.Cells(0).Value.ToString <= 3999 And entroAgu > 0 Then
                     entroAgu = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
 
                     Frase = New iTextSharp.text.Phrase("AGUAS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
@@ -1209,12 +1284,12 @@ Public Class Cotiza
                     Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                     Tabla.AddCell(Celda)
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColorBGTitulo
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColorBGTitulo
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -1236,6 +1311,13 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -1266,12 +1348,12 @@ Public Class Cotiza
                             Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                             Tabla.AddCell(Celda)
 
-                            '% descuento
-                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                            Celda.Border = 0
-                            Celda.BackgroundColor = vaColorBGTitulo
-                            Tabla.AddCell(Celda)
+                            ''% descuento
+                            'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            'Celda.Border = 0
+                            'Celda.BackgroundColor = vaColorBGTitulo
+                            'Tabla.AddCell(Celda)
 
                             'total
 
@@ -1287,6 +1369,15 @@ Public Class Cotiza
                     End If
 
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -1323,13 +1414,13 @@ Public Class Cotiza
                     Tabla.AddCell(Celda)
 
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColor
-                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColor
+                    'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -1342,7 +1433,15 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 4000 And Row.Cells(0).Value.ToString <= 4999 And entroSue > 0 Then
                     entroSue = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
 
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase("SUELOS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -1373,12 +1472,12 @@ Public Class Cotiza
                     Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                     Tabla.AddCell(Celda)
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColorBGTitulo
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColorBGTitulo
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -1400,12 +1499,18 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
                             Celda.BackgroundColor = vaColorBGTitulo
                             Tabla.AddCell(Celda)
-
                             'cantidad
                             Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
@@ -1430,12 +1535,12 @@ Public Class Cotiza
                             Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                             Tabla.AddCell(Celda)
 
-                            '% descuento
-                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                            Celda.Border = 0
-                            Celda.BackgroundColor = vaColorBGTitulo
-                            Tabla.AddCell(Celda)
+                            ''% descuento
+                            'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            'Celda.Border = 0
+                            'Celda.BackgroundColor = vaColorBGTitulo
+                            'Tabla.AddCell(Celda)
 
                             'total
 
@@ -1451,6 +1556,15 @@ Public Class Cotiza
                     End If
 
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -1487,13 +1601,13 @@ Public Class Cotiza
                     Tabla.AddCell(Celda)
 
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColor
-                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColor
+                    'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -1507,6 +1621,15 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 5000 And Row.Cells(0).Value.ToString <= 5999 And entroFeq > 0 Then
                     entroFeq = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
 
                     Frase = New iTextSharp.text.Phrase("FERTLIZANTES QUIMICOS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
@@ -1538,12 +1661,12 @@ Public Class Cotiza
                     Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                     Tabla.AddCell(Celda)
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColorBGTitulo
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColorBGTitulo
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -1565,12 +1688,18 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
                             Celda.BackgroundColor = vaColorBGTitulo
                             Tabla.AddCell(Celda)
-
                             'cantidad
                             Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
@@ -1595,12 +1724,12 @@ Public Class Cotiza
                             Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                             Tabla.AddCell(Celda)
 
-                            '% descuento
-                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                            Celda.Border = 0
-                            Celda.BackgroundColor = vaColorBGTitulo
-                            Tabla.AddCell(Celda)
+                            ''% descuento
+                            'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            'Celda.Border = 0
+                            'Celda.BackgroundColor = vaColorBGTitulo
+                            'Tabla.AddCell(Celda)
 
                             'total
 
@@ -1616,6 +1745,15 @@ Public Class Cotiza
                     End If
 
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -1652,13 +1790,13 @@ Public Class Cotiza
                     Tabla.AddCell(Celda)
 
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColor
-                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColor
+                    'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -1672,7 +1810,15 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 6000 And Row.Cells(0).Value.ToString <= 6999 And entroFor > 0 Then
                     entroFor = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
 
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase("FERTILIZANTES ORGANICOS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -1703,12 +1849,12 @@ Public Class Cotiza
                     Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                     Tabla.AddCell(Celda)
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColorBGTitulo
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColorBGTitulo
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -1730,6 +1876,13 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -1760,12 +1913,12 @@ Public Class Cotiza
                             Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                             Tabla.AddCell(Celda)
 
-                            '% descuento
-                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                            Celda.Border = 0
-                            Celda.BackgroundColor = vaColorBGTitulo
-                            Tabla.AddCell(Celda)
+                            ''% descuento
+                            'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            'Celda.Border = 0
+                            'Celda.BackgroundColor = vaColorBGTitulo
+                            'Tabla.AddCell(Celda)
 
                             'total
 
@@ -1781,6 +1934,15 @@ Public Class Cotiza
                     End If
 
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -1817,13 +1979,13 @@ Public Class Cotiza
                     Tabla.AddCell(Celda)
 
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColor
-                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColor
+                    'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -1837,7 +1999,15 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 7300 And Row.Cells(0).Value.ToString <= 7316 And entroFit > 0 Then
                     entroFit = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
 
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase("FITOPATOLOGICOS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -1868,12 +2038,12 @@ Public Class Cotiza
                     Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                     Tabla.AddCell(Celda)
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColorBGTitulo
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColorBGTitulo
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -1895,6 +2065,13 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -1925,12 +2102,12 @@ Public Class Cotiza
                             Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                             Tabla.AddCell(Celda)
 
-                            '% descuento
-                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                            Celda.Border = 0
-                            Celda.BackgroundColor = vaColorBGTitulo
-                            Tabla.AddCell(Celda)
+                            ''% descuento
+                            'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            'Celda.Border = 0
+                            'Celda.BackgroundColor = vaColorBGTitulo
+                            'Tabla.AddCell(Celda)
 
                             'total
 
@@ -1946,6 +2123,15 @@ Public Class Cotiza
                     End If
 
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -1982,13 +2168,13 @@ Public Class Cotiza
                     Tabla.AddCell(Celda)
 
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColor
-                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColor
+                    'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -2002,6 +2188,15 @@ Public Class Cotiza
                 ElseIf Row.Cells(0).Value.ToString >= 7000 And Row.Cells(0).Value.ToString <= 7256 And entroOtr > 0 Or Row.Cells(0).Value.ToString >= 7317 And Row.Cells(0).Value.ToString <= 7466 And entroOtr > 0 Then
                     entroOtr = 0 'si es un titulo pinta de un color mas suave
 
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase("OTROS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -2032,12 +2227,12 @@ Public Class Cotiza
                     Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                     Tabla.AddCell(Celda)
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColorBGTitulo
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColorBGTitulo
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -2059,6 +2254,13 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -2089,12 +2291,12 @@ Public Class Cotiza
                             Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                             Tabla.AddCell(Celda)
 
-                            '% descuento
-                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                            Celda.Border = 0
-                            Celda.BackgroundColor = vaColorBGTitulo
-                            Tabla.AddCell(Celda)
+                            ''% descuento
+                            'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            'Celda.Border = 0
+                            'Celda.BackgroundColor = vaColorBGTitulo
+                            'Tabla.AddCell(Celda)
 
                             'total
 
@@ -2110,6 +2312,15 @@ Public Class Cotiza
                     End If
 
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -2146,13 +2357,13 @@ Public Class Cotiza
                     Tabla.AddCell(Celda)
 
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColor
-                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColor
+                    'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -2166,6 +2377,16 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 8000 And Row.Cells(0).Value.ToString <= 8356 And entroKit > 0 Then
                     entroKit = 0 'si es un titulo pinta de un color mas suave
+
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
 
                     Frase = New iTextSharp.text.Phrase("KITS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
@@ -2197,12 +2418,12 @@ Public Class Cotiza
                     Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                     Tabla.AddCell(Celda)
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColorBGTitulo
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColorBGTitulo
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -2224,6 +2445,13 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -2254,12 +2482,12 @@ Public Class Cotiza
                             Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                             Tabla.AddCell(Celda)
 
-                            '% descuento
-                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                            Celda.Border = 0
-                            Celda.BackgroundColor = vaColorBGTitulo
-                            Tabla.AddCell(Celda)
+                            ''% descuento
+                            'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            'Celda.Border = 0
+                            'Celda.BackgroundColor = vaColorBGTitulo
+                            'Tabla.AddCell(Celda)
 
                             'total
 
@@ -2275,6 +2503,15 @@ Public Class Cotiza
                     End If
 
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -2311,13 +2548,13 @@ Public Class Cotiza
                     Tabla.AddCell(Celda)
 
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColor
-                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColor
+                    'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -2331,6 +2568,15 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 8357 And Row.Cells(0).Value.ToString <= 9000 And entroOtr2 > 0 Then
                     entroOtr2 = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
 
                     Frase = New iTextSharp.text.Phrase("OTROS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
@@ -2362,12 +2608,12 @@ Public Class Cotiza
                     Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                     Tabla.AddCell(Celda)
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColorBGTitulo
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColorBGTitulo
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -2389,6 +2635,13 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -2419,12 +2672,12 @@ Public Class Cotiza
                             Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                             Tabla.AddCell(Celda)
 
-                            '% descuento
-                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                            Celda.Border = 0
-                            Celda.BackgroundColor = vaColorBGTitulo
-                            Tabla.AddCell(Celda)
+                            ''% descuento
+                            'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            'Celda.Border = 0
+                            'Celda.BackgroundColor = vaColorBGTitulo
+                            'Tabla.AddCell(Celda)
 
                             'total
 
@@ -2440,6 +2693,15 @@ Public Class Cotiza
                     End If
 
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -2476,13 +2738,13 @@ Public Class Cotiza
                     Tabla.AddCell(Celda)
 
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColor
-                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColor
+                    'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -2505,12 +2767,18 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
                             Celda.BackgroundColor = vaColorBGTitulo
                             Tabla.AddCell(Celda)
-
                             'cantidad
                             Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
@@ -2535,12 +2803,12 @@ Public Class Cotiza
                             Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
                             Tabla.AddCell(Celda)
 
-                            '% descuento
-                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                            Celda.Border = 0
-                            Celda.BackgroundColor = vaColorBGTitulo
-                            Tabla.AddCell(Celda)
+                            ''% descuento
+                            'Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            'Celda.Border = 0
+                            'Celda.BackgroundColor = vaColorBGTitulo
+                            'Tabla.AddCell(Celda)
 
                             'total
 
@@ -2555,6 +2823,15 @@ Public Class Cotiza
                         End If
                     End If
 
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -2589,13 +2866,13 @@ Public Class Cotiza
                     Tabla.AddCell(Celda)
 
 
-                    '% descuento
-                    Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
-                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                    Celda.Border = 0
-                    Celda.BackgroundColor = vaColor
-                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
-                    Tabla.AddCell(Celda)
+                    ''% descuento
+                    'Frase = New iTextSharp.text.Phrase(Row.Cells(6).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    'Celda.Border = 0
+                    'Celda.BackgroundColor = vaColor
+                    'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
+                    'Tabla.AddCell(Celda)
 
                     'total
 
@@ -2618,59 +2895,59 @@ Public Class Cotiza
             Tabla = New iTextSharp.text.pdf.PdfPTable(3)
             Tabla.WidthPercentage = 100.0!
             Tabla.SetWidths(New Single() {82.0!, 9.0!, 9.0!})
-            'subtotal
-            Frase = New iTextSharp.text.Phrase(" ", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
-            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-            Celda.Border = 1
-            Celda.BackgroundColor = vaColor
-            Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT
-            Tabla.AddCell(Celda)
+            ''subtotal
+            'Frase = New iTextSharp.text.Phrase(" ", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+            'Celda.Border = 1
+            'Celda.BackgroundColor = vaColor
+            'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT
+            'Tabla.AddCell(Celda)
 
-            Frase = New iTextSharp.text.Phrase("Subtotal ", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
-            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-            Celda.Border = 1
-            Celda.BackgroundColor = vaColor
-            Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT
-            Tabla.AddCell(Celda)
+            'Frase = New iTextSharp.text.Phrase("Subtotal ", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+            'Celda.Border = 1
+            'Celda.BackgroundColor = vaColor
+            'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT
+            'Tabla.AddCell(Celda)
 
-            Frase = New iTextSharp.text.Phrase(Format(CInt(txSubTotal.Text), "####,####"), iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
-            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-            Celda.Border = 1
-            Celda.BackgroundColor = vaColor
-            Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT
-            Tabla.AddCell(Celda)
+            'Frase = New iTextSharp.text.Phrase(Format(CInt(txSubTotal.Text), "####,####"), iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+            'Celda.Border = 1
+            'Celda.BackgroundColor = vaColor
+            'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT
+            'Tabla.AddCell(Celda)
 
 
-            'Descuento
-            Frase = New iTextSharp.text.Phrase(" ", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
-            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-            Celda.Border = 0
-            Celda.BackgroundColor = vaColor
-            Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT
-            Tabla.AddCell(Celda)
+            ''Descuento
+            'Frase = New iTextSharp.text.Phrase(" ", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+            'Celda.Border = 0
+            'Celda.BackgroundColor = vaColor
+            'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT
+            'Tabla.AddCell(Celda)
 
-            Frase = New iTextSharp.text.Phrase("Descuento ", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
-            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-            Celda.Border = 0
-            Celda.BackgroundColor = vaColor
-            Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT
-            Tabla.AddCell(Celda)
+            'Frase = New iTextSharp.text.Phrase("Descuento ", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+            'Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+            'Celda.Border = 0
+            'Celda.BackgroundColor = vaColor
+            'Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT
+            'Tabla.AddCell(Celda)
 
-            If txTotalDescuento.Text <> 0 Then
-                Frase = New iTextSharp.text.Phrase(Format(CInt(txTotalDescuento.Text), "####,####"), iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
-                Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                Celda.Border = 0
-                Celda.BackgroundColor = vaColor
-                Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT
-                Tabla.AddCell(Celda)
-            Else
-                Frase = New iTextSharp.text.Phrase("0", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
-                Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
-                Celda.Border = 0
-                Celda.BackgroundColor = vaColor
-                Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT
-                Tabla.AddCell(Celda)
-            End If
+            'If txTotalDescuento.Text <> 0 Then
+            '    Frase = New iTextSharp.text.Phrase(Format(CInt(txTotalDescuento.Text), "####,####"), iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+            '    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+            '    Celda.Border = 0
+            '    Celda.BackgroundColor = vaColor
+            '    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT
+            '    Tabla.AddCell(Celda)
+            'Else
+            '    Frase = New iTextSharp.text.Phrase("0", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+            '    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+            '    Celda.Border = 0
+            '    Celda.BackgroundColor = vaColor
+            '    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT
+            '    Tabla.AddCell(Celda)
+            'End If
 
 
             'Neto
@@ -2745,9 +3022,9 @@ Public Class Cotiza
             ' FIN TABLA +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         Else         ' SIN TOTALES ##############################################################################
             'detalle tabla +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            Tabla = New iTextSharp.text.pdf.PdfPTable(3)
+            Tabla = New iTextSharp.text.pdf.PdfPTable(4)
             Tabla.WidthPercentage = 100.0!
-            Tabla.SetWidths(New Single() {80.0!, 10.0!, 10.0!})
+            Tabla.SetWidths(New Single() {10.0!, 70.0!, 10.0!, 10.0!})
 
 
             Dim tipoCelda As Integer
@@ -2781,7 +3058,14 @@ Public Class Cotiza
                 'descripcion
                 If Row.Cells(0).Value.ToString >= 1000 And Row.Cells(0).Value.ToString <= 1999 And entroFol > 0 Then
                     entroFol = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Tabla.AddCell(Celda)
 
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase("TEJIDOS VEGETALES", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -2814,6 +3098,14 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -2843,6 +3135,15 @@ Public Class Cotiza
                     End If
 
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -2870,7 +3171,14 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 2000 And Row.Cells(0).Value.ToString <= 2999 And entroTej > 0 Then
                     entroTej = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Tabla.AddCell(Celda)
 
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase("FRUTOS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -2903,6 +3211,14 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -2932,6 +3248,15 @@ Public Class Cotiza
                     End If
 
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -2959,7 +3284,14 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 3000 And Row.Cells(0).Value.ToString <= 3999 And entroAgu > 0 Then
                     entroAgu = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Tabla.AddCell(Celda)
 
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase("AGUAS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -2992,6 +3324,14 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -3021,6 +3361,15 @@ Public Class Cotiza
                     End If
 
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -3052,7 +3401,14 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 4000 And Row.Cells(0).Value.ToString <= 4999 And entroSue > 0 Then
                     entroSue = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Tabla.AddCell(Celda)
 
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase("SUELOS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -3085,6 +3441,14 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -3113,6 +3477,15 @@ Public Class Cotiza
                         End If
                     End If
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -3144,7 +3517,14 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 5000 And Row.Cells(0).Value.ToString <= 5999 And entroFeq > 0 Then
                     entroFeq = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Tabla.AddCell(Celda)
 
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase("FERTILIZANTES QUIMICOS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -3178,6 +3558,14 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -3206,6 +3594,15 @@ Public Class Cotiza
                         End If
                     End If
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -3238,7 +3635,14 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 6000 And Row.Cells(0).Value.ToString <= 6999 And entroFor > 0 Then
                     entroFor = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Tabla.AddCell(Celda)
 
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase("FERTILIZANTES ORGANICOS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -3272,6 +3676,14 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -3301,6 +3713,15 @@ Public Class Cotiza
                     End If
 
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -3331,7 +3752,14 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 7300 And Row.Cells(0).Value.ToString <= 7316 And entroFit > 0 Then
                     entroFit = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Tabla.AddCell(Celda)
 
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase("FITOPATOLOGICOS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -3365,6 +3793,14 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -3393,6 +3829,15 @@ Public Class Cotiza
                         End If
                     End If
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -3424,7 +3869,14 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 7000 And Row.Cells(0).Value.ToString <= 7256 And entroOtr > 0 Or Row.Cells(0).Value.ToString >= 7317 And Row.Cells(0).Value.ToString <= 7466 And entroOtr > 0 Then
                     entroOtr = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Tabla.AddCell(Celda)
 
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase("OTROS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -3458,6 +3910,14 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -3486,6 +3946,15 @@ Public Class Cotiza
                         End If
                     End If
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -3518,7 +3987,14 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 8000 And Row.Cells(0).Value.ToString <= 8356 And entroKit > 0 Then
                     entroKit = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Tabla.AddCell(Celda)
 
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase("KITS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -3552,6 +4028,14 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -3580,6 +4064,15 @@ Public Class Cotiza
                         End If
                     End If
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -3611,7 +4104,14 @@ Public Class Cotiza
 
                 ElseIf Row.Cells(0).Value.ToString >= 8357 And Row.Cells(0).Value.ToString <= 9000 And entroOtr2 > 0 Then
                     entroOtr2 = 0 'si es un titulo pinta de un color mas suave
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColorBGTitulo
+                    Tabla.AddCell(Celda)
 
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase("OTROS", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -3644,6 +4144,14 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -3673,6 +4181,15 @@ Public Class Cotiza
                     End If
 
                     'ahora introcuce los datos
+                    'codigo
+                    Frase = New iTextSharp.text.Phrase(Row.Cells(0).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
+                    Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                    Celda.Border = 0
+                    Celda.BackgroundColor = vaColor
+                    Celda.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT
+                    Tabla.AddCell(Celda)
+
+                    'descripcion
                     Frase = New iTextSharp.text.Phrase(Row.Cells(1).Value.ToString, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTexto))
                     Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                     Celda.Border = 0
@@ -3711,6 +4228,14 @@ Public Class Cotiza
                         vaSubmuestrads = dt.Rows(0).Item(0).ToString
 
                         If vaSubmuestra <> vaSubmuestrads Then
+                            'codigo
+                            Frase = New iTextSharp.text.Phrase("", iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano10, vaColorTexto))
+                            Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
+                            Celda.Border = 0
+                            Celda.BackgroundColor = vaColorBGTitulo
+                            Tabla.AddCell(Celda)
+
+                            'submuestra
                             Frase = New iTextSharp.text.Phrase(vaSubmuestrads, iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, vatamano9, vaColorTitulo))
                             Celda = New iTextSharp.text.pdf.PdfPCell(Frase)
                             Celda.Border = 0
@@ -3975,10 +4500,15 @@ Public Class Cotiza
     End Sub
 
     Private Sub dgCotiza_CellClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgCotiza.CellClick
-        If dgCotiza.Columns(e.ColumnIndex).Name = "quitar" AndAlso Me.dgCotiza.Rows(e.RowIndex).IsNewRow = False Then
-            Me.dgCotiza.EndEdit()
-            Me.dgCotiza.Rows.RemoveAt(e.RowIndex)
-        End If
+        Try
+            If dgCotiza.Columns(e.ColumnIndex).Name = "quitar" AndAlso Me.dgCotiza.Rows(e.RowIndex).IsNewRow = False Then
+                Me.dgCotiza.EndEdit()
+                Me.dgCotiza.Rows.RemoveAt(e.RowIndex)
+            End If
+        Catch ex As Exception
+
+        End Try
+
     End Sub
 
     Private Sub dgNotasAnalisis_CellFormatting(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellFormattingEventArgs) Handles dgNotasAnalisis.CellFormatting
@@ -4146,11 +4676,7 @@ Public Class Cotiza
 
         While i < r
             If CInt(Me.dgFoliar.Rows.Item(i).Cells.Item(2).Value) = 0 Or Me.dgFoliar.Rows.Item(i).Cells.Item(2).Value.ToString = "" Then
-
-                If Me.dgFoliar.Rows.Item(i).Cells.Item(0).Value <> 1202 Then
-                    Me.dgFoliar.Rows.Item(i).DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFB161")
-
-                End If
+                Me.dgFoliar.Rows.Item(i).DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFB161")
             End If
             i = i + 1
         End While
@@ -4232,6 +4758,26 @@ Public Class Cotiza
     End Sub
 
     Private Sub TabPage1_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TabPage1.Enter
+        formatearGrillas()
+    End Sub
+
+    Private Sub TabPage4_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TabPage4.Enter
+        formatearGrillas()
+    End Sub
+
+    Private Sub TabPage5_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TabPage5.Enter
+        formatearGrillas()
+    End Sub
+
+    Private Sub TabPage6_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TabPage6.Enter
+        formatearGrillas()
+    End Sub
+
+    Private Sub TabPage7_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TabPage7.Enter
+        formatearGrillas()
+    End Sub
+
+    Private Sub TabPage8_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TabPage8.Enter
         formatearGrillas()
     End Sub
 End Class
